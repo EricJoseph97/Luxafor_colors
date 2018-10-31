@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" href="../../../../favicon.ico">
+
+	<title>Luxafor Colors</title>
+
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+	<!-- Custom styles for this template -->
+	<style type="text/css">
+		body {
+			padding-top: 5rem;
+		}
+
+		.starter-template {
+			padding: 3rem 1.5rem;
+			text-align: center;
+		}
+
+	</style>
+
+
+
+</head>
+
+
+<body>
+
+
+	<main role="main" class="container">
+
+
+
+		<div class="starter-template">
+			<h1>Luxafor Colors</h1>
+			<br />
+			<br />
+
+			<div class="custom-control custom-radio custom-control-inline">
+				<input class="custom-control-input" id="customRadio" type="radio" name="mode" value="solid_color" checked>
+				<label class="custom-control-label" for="customRadio">Solid</label>
+			</div>
+			<div class="custom-control custom-radio custom-control-inline">
+				<input class="custom-control-input" id="customRadio1" type="radio" name="mode" value="blink">
+				<label class="custom-control-label" for="customRadio1">Blink</label>
+			</div>
+
+
+
+
+			<br />
+			<br />
+
+
+			<button class="btn btn-default" type="submit" onClick="initColor('white')">White</button>
+			<button class="btn btn-primary" type="submit" onClick="initColor('blue')">Blue</button>
+			<button class="btn btn-info" type="submit" onClick="initColor('cyan')">cyan</button>
+
+			<button class="btn btn-success" type="submit" onClick="initColor('green')">Green</button>
+
+			<button class="btn btn-warning" type="submit" onClick="initColor('yellow')">Yellow</button>
+			<button class="btn btn-danger" type="submit" onClick="initColor('red')">Red</button>
+			<button class="btn" style="background-color: #E1A1F1" type="submit" onClick="initColor('magenta')">Magenta</button>
+
+			<br />
+			<br />
+			<div style="padding: 0 40%">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">#</span>
+					</div>
+					<input id="colorText" class="colorRange form-control" name="custcolor" autocomplete="on" type="text">
+					<input class="colorRange form-control" type="color" name="favcolor" style="height:40px">
+				</div>
+
+			</div>
+
+
+
+			<br />
+
+			<div id=" test"></div>
+
+			<br />
+
+
+
+			<h4>Luxafor ID</h4>
+			<input id="uid" class="textbox" type="text" aria-label="Luxafor ID">
+
+		</div>
+
+	</main>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script>
+		$("document").ready(function() {
+
+			if (localStorage.getItem("userID") != null) {
+
+				$("#uid").val(localStorage.getItem("userID"));
+
+			}
+
+		});
+
+		function initColor(changeColor) {
+			$.post("https://api.luxafor.com/webhook/v1/actions/" + $("input:radio[name='mode']:checked").val(), {
+				userId: localStorage.getItem("userID"),
+				actionFields: {
+					color: changeColor
+				}
+			});
+		}
+
+		$("#uid").on('change', function() {
+
+			localStorage.setItem("userID", $(this).val());
+
+		});
+
+		$(".colorRange").on('change', function() {
+
+			var custColor = $(this).val();
+
+			if (custColor.charAt(0) === "#") {
+				custColor = custColor.slice(1, 7);
+				$("#colorText").val(custColor);
+			}
+
+			$.post("https://api.luxafor.com/webhook/v1/actions/solid_color", {
+				userId: localStorage.getItem("userID"),
+				actionFields: {
+					color: "custom",
+					custom_color: custColor
+				}
+			});
+
+		});
+
+	</script>
+
+
+</body>
+
+</html>
